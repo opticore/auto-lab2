@@ -1,34 +1,34 @@
 ---
-- name: Ansible Lab To Generate Push Config's to device
+- name: Ansible Lab To Push Config to device
   hosts: lab-devices
   connection: local
   gather_facts: no
 
   tasks:
-#    - name: Deploy Config using Commands
-#      ios_config:
-#        provider: "{{ creds }}"
-#        commands:
-#          - ip domain-name opticore.com
-#          - ip ssh version 2
-#          - ip ssh authentication-retries 5
-#          - int lo0
-#          - ip address 1.1.1.1 255.255.255.255
-#          - snmp-server community public123 RO
-#          - snmp-server community opticore123 RO
-#          - snmp-server contact Omid.Mortazavi@opticoreit.com
-#          - snmp-server location Magnus House, Ground Floor
-#      register: commands_output
+    - name: Deploy Config using Commands
+      ios_config:
+        provider: "{{ creds }}"
+        commands:
+          - ip domain-name opticore.com
+          - ip ssh version 2
+          - ip ssh authentication-retries 5
+          - int lo0
+          - ip address 1.1.1.1 255.255.255.255
+          - snmp-server community public123 RO
+          - snmp-server community opticore123 RO
+          - snmp-server contact Omid.Mortazavi@opticoreit.com
+          - snmp-server location Magnus House, Ground Floor
+      register: commands_output
 
 #    - name: Deploy Config using a Configuration File
 #      ios_config:
 #        provider: "{{ creds }}"
 #        src: "./_input/baseline.cfg"
 
-    - name: Deploy Config using a Jinja2 Template File
-      ios_config:
-        provider: "{{ creds }}"
-        src: "./_input/baseline.j2"
+#    - name: Deploy Config using a Jinja2 Template File
+#      ios_config:
+#        provider: "{{ creds }}"
+#        src: "./_input/baseline.j2"
 
 #- name: check the running-config against master config
 #  ios_config:

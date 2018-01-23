@@ -1,5 +1,5 @@
 ---
-- name: Ansible Lab Raw Ping Test       # Name of Play
+- name: Ansible Lab 'ios_command' Ping Test       # Name of Play
   hosts: lab-devices
   connection: local
   gather_facts: no
@@ -11,7 +11,7 @@
       password: "{{ ansible_pass }}"
 
   tasks:
-    - name: Ping Host Gateway (Named)   # Name of Task
+    - name: Ping Host Gateway           # Name of Task
       ios_command:
         provider: "{{ creds }}"
         commands:

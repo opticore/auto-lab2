@@ -20,7 +20,7 @@
     python --version
 
   - Download Opticore Ansible Lab repository from github
-    git clone ...
+    git clone https://github.com/opticore/auto-lab2.git
 
 # Ansible Configuration File
   - Used for global settings
@@ -109,5 +109,5 @@
 
     - Update .gitignore so your var files are not pushed to your git repository when you update
 
-      'touch .gitignore' or 'git init'
+      'touch .gitignore' 
       add the line 'host_vars/'
