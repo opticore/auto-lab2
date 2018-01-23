@@ -1,0 +1,23 @@
+---
+- name: Ansible Lab Get and Write running config
+  hosts: lab-devices
+  connection: local
+  gather_facts: no
+
+  vars:
+    creds:
+      username: "{{ ansible_user }}"
+      password: "{{ ansible_pass }}"
+
+  tasks:
+    - name: Ping Host Gateway
+      ios_command:
+        provider: "{{ creds }}"
+        commands:
+          - show run
+      register: show_output
+
+    - name: save output to ./
+      copy:
+        content: "{{ show_output.stdout[0] }}"
+        dest: "./_output/show_output_{{ inventory_hostname }}.txt"

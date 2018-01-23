@@ -1,0 +1,44 @@
+---
+- name: Ansible Lab Raw Ping Test       # Name of Play
+  hosts: lab-devices
+  connection: local
+  gather_facts: no
+
+  # Define Variables in your playbook
+  vars:
+    creds:
+      username: "{{ ansible_user }}"    # Reference your host_vars
+      password: "{{ ansible_pass }}"
+
+  tasks:
+    - name: Ping Host Gateway (Named)   # Name of Task
+      ios_command:
+        provider: "{{ creds }}"
+        commands:
+          - ping 10.0.0.1
+#          - show version
+      register: show_output
+
+#    - name: Debug registered variables
+#      debug: msg="{{ show_output }}"
+#      debug: msg="{{ show_output.stdout_lines }}"
+#      debug: msg="{{ show_output.stdout_lines[1] }}"
+
+#    - name: Debug Playbook variables
+#      debug: msg="{{ creds }}"
+
+#    - name: Debug Inventory variables
+#      debug: msg="{{ ansible_hostname }}"
+#      debug: msg="{{ ansible_user }}"
+#      debug: msg="{{ ansible_pass }}"
+#      debug: msg="{{ inventory_hostname }}"
+
+    # All list start with a '-'
+    # Format of an un-named task
+#    - ios_command:
+#        provider: "{{ creds }}"
+#        commands:
+#          - ping 10.0.0.1
+#      register: show_output
+
+    # Format of a named Task

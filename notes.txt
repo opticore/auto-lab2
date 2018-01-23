@@ -1,0 +1,113 @@
+### Ansible Automation Lab ###
+
+# Introduction
+
+- What?
+  - Automation and orchestration framework
+
+- Why?
+  - automate routine tasks like configuration deployment, data collection, verification
+
+- How?
+  - Executes tasks called "modules" in an order specified in a "playbook" against 1 or many hosts
+
+# Install (Make sure you update PPA (Personal Package Archive for Ansible repo to get latest modules!!!!)
+  - Install required packages for Ansible
+    sudo apt-add-repository ppa:ansible/ansible
+    sudo apt-get update
+    apt-get install ansible
+    ansible --version
+    python --version
+
+  - Download Opticore Ansible Lab repository from github
+    git clone ...
+
+# Ansible Configuration File
+  - Used for global settings
+  - http://docs.ansible.com/ansible/latest/intro_configuration.html
+  - Can be modified with local instance
+    - update only those parameters you want to change
+
+  global : /etc/ansible/ansible.cfg
+  local e.g : /ansible_lab/ansible.cfg
+
+  Some recommendations:
+  - SSH Library : change from OpenSSH (default) to paramiko which is better at handleing SSH connections to Cisco devices
+    - Netmiko & NAPLAM extends paramiko lib
+    - Paramiko is a standard lib so should be included with your default python implementation
+  - hostfile : specify the list of hosts to be managed by your ansible script.
+    - Its probably going to be preferable to reference a local instance of hosts rather than global
+  - SSH Key host_key_checking
+    - Key checking validated the remote host you connect to is the same as the one you connect to last time.
+      - Used to prevent MIM attacks
+      - Will prevent/prompt if there is a change in signature, some scripts my not handle this exception.
+      - Sometimes its desirable to turn this off (e.g Dev) or hangle unknown exceptions.
+      - ~/.ssh/known_hosts
+  - timeout (sec)
+    - deduced from default (10s) for dev
+
+# Ansible Inventory hostfile
+    global : /etc/ansible/hosts
+    local e.g : /ansible_lab/lab_hosts  # This can be whatever you like
+
+    - Contains the list of remote hosts to be managed by ansible. Can use IP, FDQN or Reference to variable reference to hosts_var
+    - Can be grouped using [] e.g [lab_devices]
+    - Commands are executed against hosts in parallel
+    - Variables must be defined to set connection parameters for each host (IP, username, pass etc)
+    - Considered best practice to keep all variable in separate folders
+      - Uses a fixed relative refernce to hosts_vars
+      - BAD practice to keep files in clear text
+      - Add hosts_vars to .gitignore so it does not get published
+
+  !!! TASK 1 - Test an Adhoc Command
+    - Execute a test command using raw module and user provided credentials.
+
+      un/pw/priv : cisco/cisco/cisco
+      devices : { IOU1 : 10.0.0.11 , IOU1 : 10.0.0.12 , IOU1 : 10.0.0.13]
+
+      ansible lab-devices -u cisco -m raw -a "ping 10.0.0.1 source eth0/0 df-bit size 1500"
+      ansible lab-devices -u cisco -m raw -a "ping 10.0.0.1 source eth0/0 df-bit size 1501"
+      ansible lab-devices -u cisco -m raw -a "ping 10.0.0.1 source eth0/0 df-bit size 1500 wrong_param"
+
+
+  !!! TASK 2 - Turn this into a playbook
+  - Our First playbook (ios_command.yml)
+
+    ansible-playbook .yml
+    ansible-playbook ios_command.yml       # Add another play by uncommenting sh run play
+    ansible-playbook ios_command.yml -v    # Add Verbosity
+    ansible-playbook ios_command.yml       # uncomment variable's run again
+
+    add another command   # Add another item to the commands: list        # - show version
+    access first/second element of registered variable                    #      debug: msg="{{ show_output.stdout_lines[1] }}"
+
+  !!! TASK 3 - Add another Task
+    - Our Second playbook (ios_sh_run_write.yml)
+    - Here we add another task, we write the output to a file
+
+      ansible-playbook ios_sh_run_write.yml     # Why are we referencing an element in an array?
+
+  !!! TASK 3 - Configure Devices
+    - Our Third playbook (ios_configure.yml)
+    - use 'ios_config' module
+    - group_vars : Common across all hosts
+    - If using common creds you add your provider to group_vars, in our instance 'all.yml'
+    - use --check to perform a 'dry-run' and -v to add details of proposed changes
+    - ios_config can use command lines, cfg or template
+
+    - Use Jinja2 Template library to make .cfg files from .j2 template & .yml or .csv
+    - Push Configuration Files to Devices
+
+  !!! TASK 4 - Secure your Credentials!
+    - Storing Credentials in plain text is not big or clever!
+
+      ansible-vault encrypt host_vars/IOU1
+      ansible-vault encrypt host_vars/IOU2
+      ansible-vault encrypt host_vars/IOU3
+
+      ansible-playbook –ask-vault-pass ios_command.yml
+
+    - Update .gitignore so your var files are not pushed to your git repository when you update
+
+      'touch .gitignore' or 'git init'
+      add the line 'host_vars/'

@@ -1,0 +1,22 @@
+ip domain-name {{ base_line.domain }}
+ip ssh version {{ base_line.ssh_ver }}
+ip ssh authentication-retries {{ base_line.ssh_tries }}
+
+snmp-server contact {{ snmp.contact }}
+snmp-server location {{ snmp.location }}
+
+{% for interface in loopbacks %}
+int loopback {{ interface.id }}
+  description Interface Loopback {{ interface.id }}
+  ip address {{ interface.ip }} {{ interface.mask }}
+  ip ospf 1 area {{ interface.ospf_area }}
+  no shut
+{% endfor %}
+
+{% for ro_community in snmp.ro %}
+snmp-server community {{ ro_community }} RO
+{% endfor %}
+
+{% for rw_community in snmp.rw %}
+snmp-server community {{ rw_community }} RW
+{% endfor %}

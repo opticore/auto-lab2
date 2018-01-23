@@ -1,0 +1,4 @@
+---
+ansible_host: 10.0.0.11
+ansible_user: cisco
+ansible_pass: cisco
