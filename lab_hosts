@@ -1,4 +1,14 @@
 [lab-devices]
-IOU1
-IOU2
-IOU3
+#IOU1
+#IOU2
+#IOU3
+opti-mag-lab-auto-rtr1
+opti-mag-lab-auto-rtr2
+opti-mag-lab-auto-rtr3
+opti-mag-lab-auto-rtr4
+
+
+# Variables can be defined here as follows
+#[lab-devices:vars]
+#ansible_user = cisco
+#ansible_pass = cisco

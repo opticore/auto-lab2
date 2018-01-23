@@ -9,11 +9,14 @@
   - automate routine tasks like configuration deployment, data collection, verification
 
 - How?
-  - Executes tasks called "modules" in an order specified in a "playbook" against 1 or many hosts
+  - Executes, on the local server, tasks called "modules" in an order specified in a "playbook" against 1 or many hosts
 
 # Install (Make sure you update PPA (Personal Package Archive for Ansible repo to get latest modules!!!!)
   - Install required packages for Ansible
-    sudo apt-add-repository ppa:ansible/ansible
+    sudo apt-add-repository ppa:ansible/ansible   #Debian/Ubuntu
+    sudo yum install epel-release                 #CentOS
+    sudo yum install git                          #Centos
+
     sudo apt-get update
     apt-get install ansible
     ansible --version
@@ -58,6 +61,14 @@
       - Uses a fixed relative refernce to hosts_vars
       - BAD practice to keep files in clear text
       - Add hosts_vars to .gitignore so it does not get published
+
+# Other Settings
+  - Connection : Local - Means 'Execute the code on remote ansible host'
+  - Authentication : By default uses SSH keys to Auth and user account running the playbook.
+    - Changed with ansible_user and ansible_pass
+    - Both parameters can be specified in a 'provider' dictionary
+    - Support 'authorize' (enter PRIV EXEC) and 'auth_pass' PRIV EXEC password
+
 
   !!! TASK 1 - Test an Adhoc Command
     - Execute a test command using raw module and user provided credentials.
@@ -109,5 +120,10 @@
 
     - Update .gitignore so your var files are not pushed to your git repository when you update
 
-      'touch .gitignore' 
+      'touch .gitignore'
       add the line 'host_vars/'
+
+      192.168.1.88	opti-mag-lab-auto-rtr1
+      192.168.1.89	opti-mag-lab-auto-rtr2
+      192.168.1.90	opti-mag-lab-auto-rtr3
+      192.168.1.91	opti-mag-lab-auto-rtr4
