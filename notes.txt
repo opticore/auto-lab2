@@ -74,11 +74,22 @@
     - Execute a test command using raw module and user provided credentials.
 
       un/pw/priv : cisco/cisco/cisco
-      devices : { IOU1 : 10.0.0.11 , IOU1 : 10.0.0.12 , IOU1 : 10.0.0.13]
+      
+      # Routers
+      192.168.1.88	opti-mag-lab-auto-rtr1
+      192.168.1.89	opti-mag-lab-auto-rtr2
+      192.168.1.90	opti-mag-lab-auto-rtr3
+      192.168.1.91	opti-mag-lab-auto-rtr4
 
-      ansible lab-devices -u cisco -m raw -a "ping 10.0.0.1 source eth0/0 df-bit size 1500"
-      ansible lab-devices -u cisco -m raw -a "ping 10.0.0.1 source eth0/0 df-bit size 1501"
-      ansible lab-devices -u cisco -m raw -a "ping 10.0.0.1 source eth0/0 df-bit size 1500 wrong_param"
+      # Servers
+      192.168.1.84	opti-mag-lab-auto-svr1
+      192.168.1.85	opti-mag-lab-auto-svr2
+      192.168.1.86	opti-mag-lab-auto-svr3
+      192.168.1.87	opti-mag-lab-auto-svr4
+      
+      ansible lab-devices -u cisco -m raw -a "ping 192.168.1.88 source eth0/0 df-bit size 1500"
+      ansible lab-devices -u cisco -m raw -a "ping 192.168.1.88 source eth0/0 df-bit size 1501"
+      ansible lab-devices -u cisco -m raw -a "ping 192.168.1.88 source eth0/0 df-bit size 1500 wrong_param"
 
 
   !!! TASK 2 - Turn this into a playbook
